@@ -33,8 +33,17 @@ class _QuizPageState extends State<QuizPage> {
     ];
   }
 
+  int getNextQuestionNumber(int current) {
+    if (current == questions.length - 1)
+      return questions.length - 1;
+    else if (current > questions.length - 1)
+      return current;
+    else
+      return current + 1;
+  }
+
   void addAnswer(int num, bool correct) {
-    int nextQue = num > questions.length - 1 ? num : num++;
+    int nextQue = getNextQuestionNumber(num);
     setState(() {
       scores.add(Icon(
         correct ? Icons.check : Icons.close,
