@@ -93,4 +93,16 @@ class QuizBrain {
     int idx = _getNextQuestionIdx();
     return getQuestion(idx);
   }
+
+  bool isLastQuestion(int number) {
+    return number == _questions.length;
+  }
+
+  bool isOnLastQuestion() {
+    return isLastQuestion(_current + 1);
+  }
+
+  void reset() {
+    _current = -1;
+  }
 }

@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:quizzer_flutter/Question.dart';
 import 'package:quizzer_flutter/quiz_brain.dart';
+import 'package:rflutter_alert/rflutter_alert.dart';
 
 class QuizPage extends StatefulWidget {
   const QuizPage({Key? key}) : super(key: key);
@@ -31,14 +32,38 @@ class _QuizPageState extends State<QuizPage> {
   }
 
   void onAnswer(bool answer) {
-    bool correct = answer == currentQuestion?.answer;
-    setState(() {
-      scores.add(Icon(
-        correct ? Icons.check : Icons.close,
-        color: correct ? Colors.green : Colors.red,
-      ));
+    if (brain.isOnLastQuestion()) {
+      Alert(
+          context: context,
+          title: 'Quiz Finished',
+          type: AlertType.info,
+          buttons: [
+            DialogButton(
+              child: Text('Reset'),
+              onPressed: () {
+                resetAll();
+                Navigator.pop(context);
+              },
+            )
+          ]).show();
+    } else {
+      bool correct = answer == currentQuestion?.answer;
+      setState(() {
+        scores.add(Icon(
+          correct ? Icons.check : Icons.close,
+          color: correct ? Colors.green : Colors.red,
+        ));
+      });
+      retrieveQuestion();
+    }
+  }
+
+  void resetAll() {
+    brain.reset();
+    this.setState(() {
+      scores = [];
     });
-    retrieveQuestion();
+    this.retrieveQuestion();
   }
 
   @override
